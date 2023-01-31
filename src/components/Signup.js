@@ -24,6 +24,19 @@ export default function Signup() {
     setFormInput({ [name]: newValue });
   };
 
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+
+    let data = { formInput };
+
+    console.log(data);
+    setFormInput({
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
+  };
+
   return (
     <>
       <Box
@@ -43,6 +56,7 @@ export default function Signup() {
               flexDirection: "column",
               gap: 4,
             }}
+            onSubmit={handleSubmit}
           >
             <Box sx={{ mb: 3 }}>
               {" "}
