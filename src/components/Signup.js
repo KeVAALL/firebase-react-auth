@@ -67,7 +67,7 @@ export default function Signup() {
               <Input
                 id="email"
                 name="email"
-                defaultValue={formInput.email}
+                value={formInput.email}
                 onChange={handleInput}
               />
             </FormControl>
@@ -76,7 +76,7 @@ export default function Signup() {
               <Input
                 id="password"
                 name="password"
-                defaultValue={formInput.password}
+                value={formInput.password}
                 onChange={handleInput}
               />
             </FormControl>
@@ -87,7 +87,7 @@ export default function Signup() {
               <Input
                 id="confirmPassword"
                 name="confirmPassword"
-                defaultValue={formInput.confirmPassword}
+                value={formInput.confirmPassword}
                 onChange={handleInput}
               />
             </FormControl>
