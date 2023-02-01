@@ -1,10 +1,13 @@
+import AuthProvider from "../context/AuthContext";
 import Signup from "./Signup";
 
 function App() {
   return (
-    <div className="App">
-      <Signup />
-    </div>
+    <AuthProvider>
+      <div className="App">
+        <Signup />
+      </div>
+    </AuthProvider>
   );
 }
 
