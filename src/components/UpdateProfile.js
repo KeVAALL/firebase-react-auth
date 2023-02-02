@@ -17,19 +17,20 @@ import { useAuth } from "../context/AuthContext";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
-export default function Login() {
+export default function UpdateProfile() {
   const [formInput, setFormInput] = useReducer(
     (state, newState) => ({ ...state, ...newState }),
     {
       email: "",
       password: "",
+      confirmPassword: "",
     }
   );
   const [error, setError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [loading, setLoading] = useState(false);
-  const { logIn } = useAuth();
+  const { currentUser, updateUserEmail, updateUserPassword } = useAuth();
   const navigate = useNavigate();
 
   const handleInput = (evt) => {
@@ -46,25 +47,31 @@ export default function Login() {
     if (!validator.isEmail(formInput.email)) {
       return setEmailError("Enter Valid Email :(");
     }
-
-    try {
-      setError("");
-      setEmailError("");
-      setPasswordError("");
-      setLoading(true);
-      await logIn(formInput.email, formInput.password);
-      navigate("/");
-    } catch {
-      setError("Cannot Sign in");
+    if (formInput.password !== formInput.confirmPassword) {
+      return setPasswordError("Passwords do not match");
     }
 
-    setLoading(false);
+    const promises = [];
+    setLoading(true);
+    setError("");
 
-    setFormInput({
-      email: "",
-      password: "",
-      confirmPassword: "",
-    });
+    if (formInput.email !== currentUser.email) {
+      promises.push(updateUserEmail(formInput.email));
+    }
+    if (formInput.password) {
+      promises.push(updateUserPassword(formInput.password));
+    }
+
+    Promise.all(promises)
+      .then(() => {
+        navigate("/");
+      })
+      .catch(() => {
+        setError("Failed to update account");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
@@ -72,26 +79,27 @@ export default function Login() {
       <Box
         sx={{
           display: "flex",
-          flexDirection: "column",
           alignContent: "center",
           justifyContent: "center",
           //   m: 4,
         }}
       >
-        <Card sx={{ minWidth: 500, mx: "auto", mt: 10 }}>
+        <Card sx={{ minWidth: 500, mt: 10 }}>
           <Box
             component="form"
             sx={{
               m: 4,
               display: "flex",
               flexDirection: "column",
+              justifyContent: "center",
+              alignContent: "center",
               gap: 4,
             }}
             onSubmit={handleSubmit}
           >
             <Box sx={{ mb: 3 }}>
               {" "}
-              <Typography variant="h3">Login</Typography>
+              <Typography variant="h3">Update Profile</Typography>
             </Box>
             {emailError && <Alert severity="error">{emailError}</Alert>}
             {error && <Alert severity="error">{error}</Alert>}
@@ -101,7 +109,7 @@ export default function Login() {
               <Input
                 id="email"
                 name="email"
-                value={formInput.email}
+                defaultValue={currentUser.email}
                 onChange={handleInput}
               />
             </FormControl>
@@ -114,7 +122,17 @@ export default function Login() {
                 onChange={handleInput}
               />
             </FormControl>
-
+            <FormControl variant="standard">
+              <InputLabel htmlFor="confirmPassword">
+                Confirm Password
+              </InputLabel>
+              <Input
+                id="confirmPassword"
+                name="confirmPassword"
+                value={formInput.confirmPassword}
+                onChange={handleInput}
+              />
+            </FormControl>
             <Button
               type="submit"
               variant="contained"
@@ -122,27 +140,14 @@ export default function Login() {
               disabled={loading}
               sx={{ mt: 3 }}
             >
-              Login
+              Update
             </Button>
-            <Box sx={{ m: "auto" }}>
-              {" "}
-              <Typography variant="subtitle1">
-                <Link
-                  to="/forgot-password"
-                  style={{ textDecoration: "none", color: "black" }}
-                >
-                  {" "}
-                  Forgot Password?{" "}
-                </Link>
-              </Typography>
-            </Box>
+
+            <Typography variant="subtitle1" sx={{ margin: "auto" }}>
+              <Link to="/"> Cancel </Link>
+            </Typography>
           </Box>
         </Card>
-        <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
-          <Typography variant="subtitle1" sx={{ margin: "auto" }}>
-            Need an account? <Link to="/signup"> Signup </Link>
-          </Typography>
-        </Box>
       </Box>
     </>
   );
