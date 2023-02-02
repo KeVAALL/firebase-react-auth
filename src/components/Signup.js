@@ -1,13 +1,16 @@
 import React, { useReducer, useState } from "react";
-import Card from "@mui/material/Card";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import FormControl from "@mui/material/FormControl";
-import FormHelperText from "@mui/material/FormHelperText";
-import Input from "@mui/material/Input";
-import InputLabel from "@mui/material/InputLabel";
-import Alert from "@mui/material/Alert";
-import Button from "@mui/material/Button";
+
+import {
+  Card,
+  Box,
+  Typography,
+  FormControl,
+  FormHelperText,
+  Input,
+  InputLabel,
+  Alert,
+  Button,
+} from "@mui/material";
 
 import validator from "validator";
 import { useAuth } from "../context/AuthContext";
