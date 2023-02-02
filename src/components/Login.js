@@ -73,12 +73,13 @@ export default function Login() {
       <Box
         sx={{
           display: "flex",
+          flexDirection: "column",
           alignContent: "center",
           justifyContent: "center",
           //   m: 4,
         }}
       >
-        <Card sx={{ minWidth: 500, mt: 10 }}>
+        <Card sx={{ minWidth: 500, m: "auto" }}>
           <Box
             component="form"
             sx={{
@@ -124,11 +125,25 @@ export default function Login() {
             >
               Login
             </Button>
-            <Typography variant="subtitle1" sx={{ margin: "auto" }}>
-              Need an account? <Link to="/signup"> Signup </Link>
-            </Typography>
+            <Box sx={{ m: "auto" }}>
+              {" "}
+              <Typography variant="subtitle1">
+                <Link
+                  to="/forgot-password"
+                  style={{ textDecoration: "none", color: "black" }}
+                >
+                  {" "}
+                  Forgot Password?{" "}
+                </Link>
+              </Typography>
+            </Box>
           </Box>
         </Card>
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
+          <Typography variant="subtitle1" sx={{ margin: "auto" }}>
+            Need an account? <Link to="/signup"> Signup </Link>
+          </Typography>
+        </Box>
       </Box>
     </>
   );

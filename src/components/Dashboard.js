@@ -1,14 +1,24 @@
-import { Box, Button, Card, Typography } from "@mui/material";
-import { updateCurrentUser } from "firebase/auth";
-import React from "react";
-import { Link } from "react-router-dom";
+import { Alert, Box, Button, Card, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
 
 export default function Dashboard() {
-  const { currentUser } = useAuth();
+  const { currentUser, logOut } = useAuth();
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  function handleLogout() {}
+  async function handleLogout() {
+    setError("");
+
+    try {
+      await logOut();
+      navigate("/login");
+    } catch {
+      setError("Cannot Logout");
+    }
+  }
 
   return (
     <>
@@ -57,6 +67,7 @@ export default function Dashboard() {
             >
               Log Out
             </Button>
+            {error && <Alert severity="error">{error}</Alert>}
           </Box>
         </Card>
       </Box>
